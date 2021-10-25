@@ -4,11 +4,14 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
 
+
+
 import org.junit.runner.RunWith;
 //import org.zerock.controller.config.RootConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.zerock.service.BoardService;
 
 
 import javax.sql.DataSource;
@@ -20,7 +23,7 @@ import static junit.framework.TestCase.fail;
 
 //xml인 경우
 @ContextConfiguration(
-        locations = {"file:web/WEB-INF/applicationContext.xml"}
+        locations = {"file:../../../webapp/WEB-INF/applicationContext.xml"}
 )
 
 //java인경우
@@ -34,6 +37,9 @@ public class JDBCTest1 {
 
     @Setter(onMethod_={@Autowired})
     private SqlSessionFactory sqlSessionFactory;
+
+    @Setter(onMethod_={@Autowired})
+    private BoardService service;
 
     @Test
     public void testMyBatis(){
@@ -56,4 +62,8 @@ public class JDBCTest1 {
             fail(e.getMessage());
         }
     }
+
+
+
+
 }
