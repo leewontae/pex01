@@ -59,7 +59,7 @@ public class BoardControllerTests {
                 .param("content","테스트 새글 내용")
                 .param("writer","user00")).andReturn().getModelAndView().getViewName();
 
-        log.info("##########"+resultPage); // url 정보 나온다.
+        log.info("####  ######"+resultPage); // url 정보 나온다.
     }
 
     @Test
