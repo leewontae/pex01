@@ -69,9 +69,9 @@
                                         <option value="T">제목 or 작성자</option>
                                         <option value="T">제목 or 제목 or 작성자</option>--%>
                                     </select>
-                                    <input type="text" name="keyword" value="<c:out value="${pageMaker.cri.keyword}"/> "/>
-                                    <input type="hidden" name="pageNum" value="<c:out value="${pageMaker.cri.pageNum}"/> "/>
-                                    <input type="hidden" name="amount" value="<c:out value="${pageMaker.cri.amount}"/> "/>
+                                    <input type="text" name="keyword" value="<c:out value='${pageMaker.cri.keyword}'/>"/>
+                                    <input type="hidden" name="pageNum" value="<c:out value='${pageMaker.cri.pageNum}'/>"/>
+                                    <input type="hidden" name="amount" value="<c:out value='${pageMaker.cri.amount}'/>"/>
                                     <button class="btn btn-default">Search</button>
 
                                 </form>
