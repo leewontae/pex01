@@ -274,7 +274,8 @@ aria-hidden="true">
               //  alert("@@@@@get.jsp@@@@@"+result);
                 console.log("@@@@@@@@@get.jsp"+ result);
                 modal.modal("hide");
-                showList(1);
+                //showList(1);
+                showList(pageNum); // 수정 시에도 현재 댓글이 포함된 페이지로 이동한다.
             });
 
         });
@@ -286,7 +287,8 @@ aria-hidden="true">
                alert(result);
 
                modal.modal("hide");
-               showList(1);
+               //showList(1);
+                showList(pageNum);
             });
         });
 
@@ -340,6 +342,16 @@ aria-hidden="true">
 
             replyPageFooter.html(str);
         }
+    replyPageFooter.on("click","li a",function(e){
+        //댓글페이징처리 후 1페이지에서 2페이지 누렀을때 넘어가게 하는 코드
+       e.preventDefault(); //a 태그의 기본 동작을 제어 한다.
+       console.log("page click");
+
+       var targetPageNum = $(this).attr("href");
+       console.log("targetPageNum: " + targetPageNum);
+       pageNum = targetPageNum;
+       showList(pageNum);
+    });
 
     });
 </script>
