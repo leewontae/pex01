@@ -288,7 +288,7 @@ aria-hidden="true">
 
                modal.modal("hide");
                //showList(1);
-                showList(pageNum);
+                showList(pageNum);// 삭제 시에도 현재 댓글이 포함된 페이지로 이동한다.
             });
         });
 

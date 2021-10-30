@@ -11,8 +11,10 @@ import org.zerock.service.BoardService;
 import org.zerock.vo.BoardVo;
 import org.zerock.vo.Criteria;
 import org.zerock.vo.PageVo;
+import sun.tools.jconsole.JConsole;
 
 import javax.swing.*;
+import java.util.List;
 
 @Controller
 @Log4j
@@ -37,7 +39,11 @@ public class BoardController {
 
         model.addAttribute("list",boardService.getList(criteria));
         //model.addAttribute("pageMaker", new PageVo(criteria,123));
+        List<BoardVo> boardvolist = boardService.getList(criteria);
+        for(BoardVo vo : boardvolist){
 
+            log.info(  "@@@@@@@@@@@@@@@@@@@@@"+  vo.getReplyCnt());
+        }
         int total= boardService.getTotal(criteria);
         log.info("total: "+ total);
 
