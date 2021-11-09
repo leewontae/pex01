@@ -18,6 +18,9 @@ import org.zerock.vo.PageVo;
 import sun.tools.jconsole.JConsole;
 
 import javax.swing.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -114,20 +117,53 @@ public class BoardController {
         log.info("getAtttachList" +bno);
         return new ResponseEntity<>(boardService.getAttachList(bno), HttpStatus.OK);
     }
+
+    private void deleteFiles(List<BoardAttachVO> attachList) {
+
+        if(attachList == null || attachList.size() == 0) {
+            return;
+        }
+
+        log.info("delete attach files...................");
+        log.info(attachList);
+
+        attachList.forEach(attach -> {
+            try {
+                Path file  = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\" + attach.getUuid()+"_"+ attach.getFileName());
+
+                Files.deleteIfExists(file);
+
+                if(Files.probeContentType(file).startsWith("image")) {
+
+                    Path thumbNail = Paths.get("C:\\upload\\"+attach.getUploadPath()+"\\s_" + attach.getUuid()+"_"+ attach.getFileName());
+
+                    Files.delete(thumbNail);
+                }
+
+            }catch(Exception e) {
+                log.error("delete file error" + e.getMessage());
+            }//end catch
+        });//end foreachd
+    }
+
+
     @PostMapping("/remove")
     public String remove(@RequestParam("bno") long bno , @ModelAttribute("cri") Criteria cri,  RedirectAttributes redirectAttributes){
 
         log.info("remove....."+bno);
+        List<BoardAttachVO> attachList = boardService.getAttachList(bno);
+
         if(boardService.remove(bno)){
+            deleteFiles(attachList);
             redirectAttributes.addFlashAttribute("result","success");
         }
 
-       redirectAttributes.addAttribute("pageNum",cri.getPageNum());
+       /*redirectAttributes.addAttribute("pageNum",cri.getPageNum());
         redirectAttributes.addAttribute("amount",cri.getAmount());
         redirectAttributes.addAttribute("type",cri.getType());
-        redirectAttributes.addAttribute("keyword",cri.getKeyword());
-        return "redirect:/board/list";
-        //return "redirect:/board/list" +cri.getListLink();
+        redirectAttributes.addAttribute("keyword",cri.getKeyword());*/
+        //return "redirect:/board/list";
+        return "redirect:/board/list" +cri.getListLink();
     }
 
 

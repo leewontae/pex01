@@ -30,7 +30,7 @@ public class Criteria {
         return type==null? new String[] {}:type.split("");
     }
 
-    public String getListLink(){ //url w
+    public String getListLink(){ //url
         UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
                 .queryParam("pageNum",this.pageNum)
                 .queryParam("amount",this.getAmount())
