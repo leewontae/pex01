@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="pex01:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/pex01_war_exploded</output-path>
+    <output-path>$PROJECT_DIR$/src/main/webapp</output-path>
     <root id="root">
       <element id="javaee-facet-resources" facet="pex01/web/Web" />
       <element id="directory" name="WEB-INF">
@@ -43,6 +43,7 @@
           <element id="library" level="project" name="Maven: org.codehaus.woodstox:stax2-api:3.1.4" />
           <element id="library" level="project" name="Maven: org.aspectj:aspectjrt:1.9.0" />
           <element id="library" level="project" name="Maven: org.aspectj:aspectjweaver:1.9.0" />
+          <element id="library" level="project" name="Maven: net.coobird:thumbnailator:0.4.8" />
         </element>
       </element>
     </root>

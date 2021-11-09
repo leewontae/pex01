@@ -12,8 +12,10 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <java-version>1.8</java-version>
         <org.springframework-version>5.2.3.RELEASE</org.springframework-version>
         <org.aspectj-version>1.6.10</org.aspectj-version>
+        <org.slf4j-version>1.7.25</org.slf4j-version>
     </properties>
 
     <dependencies>
@@ -135,6 +137,16 @@
         </dependency>
         <!--HikariCP end-->
 
+        <!--썸네일 이미지 start-->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.8</version>
+        </dependency>
+        <!--썸네일 이미지 end -->
+
+        <!--   웹서버의 서능을 향상하기 위해 사용되는 자바 클래스 일종
+           spring 필수 end-->
         <!-- MyBatis start-->
         <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
         <dependency>
@@ -165,6 +177,19 @@
             <version>${org.springframework-version}</version>
         </dependency>
         <!-- MyBatis end-->
+
+        <!--json, xml 사용 할때 필수  -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.9.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>2.9.5</version>
+        </dependency>
+
         <!--aop 설정과 관련 있는 라이브러리 start
             스프링은 aop 처리가 된 객체를 생설할 때 aspectj weaver 라이브러리의 도움을 받아서 동작 한다. -->
         <dependency>

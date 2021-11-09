@@ -3,11 +3,15 @@ package org.zerock.controller;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.zerock.service.BoardService;
+import org.zerock.vo.BoardAttachVO;
 import org.zerock.vo.BoardVo;
 import org.zerock.vo.Criteria;
 import org.zerock.vo.PageVo;
@@ -51,12 +55,28 @@ public class BoardController {
     }
 
 
+    @GetMapping("/register")
+    public String register(){
+
+        return "/board/register";
+    }
     @PostMapping("/register")
     public String register(BoardVo boardVo, RedirectAttributes rttr){
         // RedirectAttributes는 등록 작업 이 끝난 후 다시 목록화면으로 이동하기 위함인데, 추가적으로 새롭게 등록괸 게시물의 번호를 같이 전달하기 위해서
         // 사용한다.
         log.info("register:" + boardVo);
+
+        if (boardVo.getAttachList() != null) {
+
+            boardVo.getAttachList().forEach(attach -> log.info(attach));
+
+        }
+        log.info("==========================");
+        rttr.addFlashAttribute("result", boardVo.getBno());
+
         boardService.add(boardVo);
+
+
         rttr.addFlashAttribute("result",boardVo.getBno());
         // addFlashAttribute() 를 이용해서 일회성 으로만 데이터를 사용할수 있으므로 이를 이용해서 경고창이나 모달창 등을 보여주는 방식
 
@@ -87,7 +107,13 @@ public class BoardController {
         return "redirect:/board/list";
         //return "redirect:/board/list" + cri.getListLink();
     }
+    @GetMapping(value = "/getAttachList", produces= MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<List<BoardAttachVO>> getAttachList(Long bno){
 
+        log.info("getAtttachList" +bno);
+        return new ResponseEntity<>(boardService.getAttachList(bno), HttpStatus.OK);
+    }
     @PostMapping("/remove")
     public String remove(@RequestParam("bno") long bno , @ModelAttribute("cri") Criteria cri,  RedirectAttributes redirectAttributes){
 

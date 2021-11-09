@@ -1,5 +1,6 @@
 package org.zerock.service;
 
+import org.zerock.vo.BoardAttachVO;
 import org.zerock.vo.BoardVo;
 import org.zerock.vo.Criteria;
 
@@ -13,4 +14,5 @@ public interface BoardService {
     public List<BoardVo> getList();
     public List<BoardVo> getList(Criteria criteria);
     public int getTotal(Criteria cri);
+    public List<BoardAttachVO> getAttachList(Long bno);
 }
