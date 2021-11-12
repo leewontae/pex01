@@ -42,7 +42,6 @@
         </dependency>
         <!-- 파일 업로드 처리 에 필수 end-->
 
-
         <!-- jstl 사용 할 때 필수  start-->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -203,6 +202,33 @@
             <version>1.9.0</version>
         </dependency>
         <!--aop 설정과 관련 있는 라이브러리 end-->
+
+        <!-- security start -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>5.0.6.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>5.0.6.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>5.0.6.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>5.0.6.RELEASE</version>
+        </dependency>
+        <!--     security end-->
+
     </dependencies>
 
 </project>

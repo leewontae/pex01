@@ -3,9 +3,41 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
+
+<!--    스프링 시큐리티의 적용 이후에 한글이 꺠지지 않도록 설정해야 한다. start -->
+
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--    스프링 시큐리티의 적용 이후에 한글이 꺠지지 않도록 설정해야 한다. end -->
+
+    <!--스프링 시큐리티가 스프림 mvc에서 사용되기 위해서는 필터를 이용해서 스프링 동작에 관여 하도록 설정 start-->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--스프링 시큐리티가 스프림 mvc에서 사용되기 위해서는 필터를 이용해서 스프링 동작에 관여 하도록 설정 end-->
+
+
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/applicationContext.xml</param-value>
+        <param-value>/WEB-INF/applicationContext.xml
+            /WEB-INF/security-context.xml
+        </param-value>
     </context-param>
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -29,20 +61,5 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    <filter>
-        <filter-name>characterEncoding</filter-name>
-        <filter-class>org.springframework.web.filter.CharacterEncodingFilter
-        </filter-class>
-
-        <init-param>
-            <param-name>encoding</param-name>
-            <param-value>utf-8</param-value>
-        </init-param>
-
-    </filter>
-    <filter-mapping>
-        <filter-name>characterEncoding</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
 
 </web-app>

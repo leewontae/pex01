@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 <%@include file="../includes/header.jsp"%>
 
 <div class="row">
@@ -115,7 +116,13 @@
                     onclick="location.href='/board/modify?bno=<c:out value="${board.bno}"/>'"> modify</button>
                 <button data-oper ="list" class="btn btn-default"
                 onclick="location.href='/board/list'">list</button>--%>
-                <button data-oper='modify' class="btn btn-default">Modify</button>
+                <sec:authentication property="principal" var="pinfo"/>
+                    <sec:authorize access="isAuthenticated()">
+                        <c:if test="${pinfo.username eq board.writer}">
+                            <button data-oper='modify' class="btn btn-default">Modify</button>
+                        </c:if>
+                    </sec:authorize>
+
                 <button data-oper='list' class="btn btn-info">List</button>
 
                 <form id="operForm" action="/board/modify" method="get"> <%--조회 페이지에서 검색 처리 --%>
@@ -140,7 +147,10 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <i class="fa fa-comments fa-fw"></i> Reply
-                <button id="addReplyBtn" class="btn btn-primary btn-xs pull-right"> new reply</button>
+                <sec:authorize access="isAuthenticated()">
+                    <button id="addReplyBtn" class="btn btn-primary btn-xs pull-right"> new reply</button>
+                </sec:authorize>
+
             </div>
             <div class="panel-body">
                 <ul class="chat">

@@ -8,6 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec"%>
 <%@include file="../includes/header.jsp"%>
 <style>
 
@@ -70,6 +71,7 @@
             <div class="panel-body">
 
                 <form role="form" action="/board/register" method="post">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     <div class="form-group">
                         <label>title</label><input class="form-control" name="title">
                     </div>
@@ -79,8 +81,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label>writer</label><input class="form-control" name="writer">
+                        <label>writer</label
+                        ><input class="form-control" name="writer"
+                    value='<sec:authentication property="principal.username"/>' readonly="readonly">
                     </div>
+                    <%--현재 로그인한 사용자 정보 가져오기 / 설정 1. security-context에서 게시물 등록 페이지 들어갈때 권한체크 경로 설정 하고
+                     2.해당 getmapping  controller 에서   @PreAuthorize("isAuthenticated()") 설정 하면
+                      1. 에서 권한 로그인 하면 2. 에서 인증된 사용자면 해달 페이지로 보내준다. --%>
 
                     <button type="submit" class="btn btn-default">submit button</button>
                     <button type="reset" class="btn btn-default">reset button</button>

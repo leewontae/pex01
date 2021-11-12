@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:security="http://www.springframework.org/schema/security"
+	   xmlns:securitu="http://www.springframework.org/schema/security"
+	   xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="customAccessDenied" class="org.zerock.security.CustomAccessDeniedHandler"></bean>
+<!--	<bean id="customLoginSuccess" class="org.zerock.security.CustomLoginSuccessHandler"></bean>-->
+	<!--<bean id="customNoOpPasswordEncoder" class="org.zerock.security.CustomNoOpPasswordEncoder"></bean>-->
+	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+	<bean id="customUserDetailsService" class="org.zerock.security.CustomUserDatailsService"></bean>
+	<security:http>
+
+		<security:intercept-url pattern="/sample/all" access="permitAll"/>
+		<!--security:intercept-url : 특정한 uri에 접근할 때 인터셉터를 이용해서 접근 제한하는 설정-->
+		<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')"/>
+		<!--ROLE_MEMBER 권한을 가진 사용자만 /sample/member에 접근 가능 하다.  설정 후 was를 실행 하면 강제로 로그인 페이지로 이동한다. -->
+		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')"/>
+		<security:intercept-url pattern="/board/list" access="permitAll"/>
+		<security:intercept-url pattern="/board/register" access="hasRole('ROLE_ADMIN')"/>
+		<security:remember-me data-source-ref="dataSource" token-validity-seconds="604800"/>
+		<!--자동 로그인에 필요하며 예제에서 자동로그인 체크한 후 로그인 하면 자동로그인에 대한 쿠기가 생성되고 db에 저장된다.-->
+
+		<security:logout logout-url="/customLogout" invalidate-session="true" delete-cookies="remember-me, JSESSIONID" />
+
+		<!--<security:form-login/>-->
+		<!--이 방식은 시큐리티가 제공하는 로그인 페이지 이며 우리가 만든 로그인 페이지로 경로 설정 하자 -->
+<!--<security:form-login login-page="/customLogin" authentication-success-handler-ref="customLoginSuccess"/>-->
+		<security:form-login login-page="/customLogin"/>
+<!--이 경로로 우리가 직접 만들어서 처리 할거다.-->
+
+		<security:logout logout-url="/customLogout" invalidate-session="true"/>
+		<!--<securitu:access-denied-handler error-page="/accessError"/>-->
+		<!--access-denied-handler는 AccessDeniedHandler 인터페이스의 구현체를 지정하거나 error-page를 지정할 수 있다.
+		- access denied 에러가 뜨면 /accessErr 설정 controller를 호출하겠다는 의미이다.
+		- /accessError를 처리하는 controller 와 jsp 만들어야 한다.
+		- 이 방식은 에러처리는 되지만 memeber권한에서 admin 권하을 얻을때 url에는 admin경로 표시와 에러가 함께 출력된다.
+		 url을 admin이 아니라 우리가 직접 에러페이지를 만들어서 그 경로를 출력하게끔 하자 밑에 과정이다.-->
+		<security:access-denied-handler ref="customAccessDenied"/>
+		<!--<security:csrf disabled="true"/>-->
+
+	</security:http>
+
+	<security:authentication-manager>
+
+
+		<!--사용자 아이디에 맞는 권한을 출력하는 자바 파일을 빈으로 등록-->
+	<security:authentication-provider user-service-ref="customUserDetailsService">
+
+		<!--<security:jdbc-user-service data-source-ref="dataSource"/>-->
+		<!--db 사용자 아이디와 그에 따른 권한으로 로그인 -->
+<!--	<security:jdbc-user-service data-source-ref="dataSource"
+		users-by-username-query="select userid, userpw, enabled from tbl_member where userid=?"
+		authorities-by-username-query="select userid, auth from tbl_member_auth where userid=?"/>-->
+
+
+
+		<!--<security:password-encoder ref="customNoOpPasswordEncoder"/>
+		&lt;!&ndash;패스워드 인코딩&ndash;&gt;-->
+		<security:password-encoder ref="bcryptPasswordEncoder"/>
+
+		<!--		<security:user-service>
+                    <security:user name="member" password="{noop}member" authorities="ROLE_MEMBER"/>
+
+                    &lt;!&ndash;해당 권한에 대한 로그인 아이디와 패스워드 설정 부분
+                    -문자열로 고정한 방식이로 했므녀 InMemoryUserDatailsmanager를 이용한다.
+                    -스프링 시큐리티 5부터 반드시 passwordencoder를 이용해야 한다.
+                    -만일 패스워드 인코딩없이 사용하고 싶다면 패스워드 앞에 {noop} 문자열을 추가 한다.
+                    -로그 아웃 : 개발자 도구에서 application 탭에서 cookies 확인 해보면 JSESSIONID 있는데 이것을 삭제하면 로그아웃이 된다. &ndash;&gt;
+
+                    <security:user name="admin" password="{noop}admin" authorities="ROLE_ADMIN"/>
+
+                </security:user-service>-->
+
+
+	</security:authentication-provider>
+
+	</security:authentication-manager>
+<!--스프링 시큐리티가 동작하기 위해서는 authentication-manager(인증 매니저) 라는 조재와 스프링 시큐리티의 시작지점이 필요하다.  -->
+
+
+</beans>

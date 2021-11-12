@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -59,11 +60,13 @@ public class BoardController {
 
 
     @GetMapping("/register")
+    @PreAuthorize("isAuthenticated()")
     public String register(){
 
         return "/board/register";
     }
     @PostMapping("/register")
+    @PreAuthorize("isAuthenticated()")
     public String register(BoardVo boardVo, RedirectAttributes rttr){
         // RedirectAttributes는 등록 작업 이 끝난 후 다시 목록화면으로 이동하기 위함인데, 추가적으로 새롭게 등록괸 게시물의 번호를 같이 전달하기 위해서
         // 사용한다.
@@ -75,7 +78,6 @@ public class BoardController {
 
         }
         log.info("==========================");
-        rttr.addFlashAttribute("result", boardVo.getBno());
 
         boardService.add(boardVo);
 
@@ -95,6 +97,8 @@ public class BoardController {
         model.addAttribute("board",boardService.get(bno));
 
     }
+    //@preAutorize+ 표현식을 사용해서 메서드를 실행하기 전에 로그인 사용자와 현재피라미터로 전달된 작성자와 같은지 확인해줘야 한다.
+    @PreAuthorize("principal.username == #board.writer")
     @PostMapping("/modify")
     public String modify(BoardVo boardVo,@ModelAttribute("cri") Criteria cri, RedirectAttributes rttr){
         log.info("modify"+ boardVo);
@@ -107,7 +111,7 @@ public class BoardController {
         rttr.addAttribute("amount",cri.getAmount());
         rttr.addAttribute("type",cri.getType());
         rttr.addAttribute("keyword",cri.getKeyword());
-        return "redirect:/board/list";
+        return "redirect:/board/list"+cri.getListLink();
         //return "redirect:/board/list" + cri.getListLink();
     }
     @GetMapping(value = "/getAttachList", produces= MediaType.APPLICATION_JSON_VALUE)
@@ -145,10 +149,10 @@ public class BoardController {
             }//end catch
         });//end foreachd
     }
-
-
+    //@preAutorize+ 표현식을 사용해서 메서드를 실행하기 전에 로그인 사용자와 현재피라미터로 전달된 작성자와 같은지 확인해줘야 한다.
+    @PreAuthorize("principal.username == #writer")
     @PostMapping("/remove")
-    public String remove(@RequestParam("bno") long bno , @ModelAttribute("cri") Criteria cri,  RedirectAttributes redirectAttributes){
+    public String remove(@RequestParam("bno") long bno , @ModelAttribute("cri") Criteria cri,  RedirectAttributes redirectAttributes, String writer){
 
         log.info("remove....."+bno);
         List<BoardAttachVO> attachList = boardService.getAttachList(bno);
